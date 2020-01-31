@@ -42,11 +42,22 @@ class CriptKicker():
             key = msg[position: position + self.__key_length]  # Check strings of the same size
             if self.validate_text(key):
                 if position + self.__key_length < length_msg:  # Can exist the next character?
-                    next_char = msg[position + self.__key_length: position + self.__key_length + 1]
-                    if next_char == " ":  # The word ended, so, key is valid
+                    next_char = msg[position + self.__key_length]
+                    before_char = ""
+                    if position - 1 >= 0:  # Check if there is a before character
+                        before_char = msg[position - 1]
+                    if next_char == " " and before_char == "":
+                        # You are at the begining of the message
                         return key
-                else:  # String ended, so, there aren't more to check and key is valid
-                    return key
+                    elif next_char == " " and before_char == " ":
+                        # You are somewhere in the midle of message
+                        return key
+                else:  # You are at the end of the message
+                    before_char = ""
+                    if position - 1 >= 0:  # Check if there is a before character
+                        before_char = msg[position - 1]
+                    if before_char == " " or before_char == "":  # Valid message
+                        return key
             position += 1
 
         return "NO SE ENCONTRO SOLUCION"
