@@ -6,72 +6,71 @@ class CriptKicker():
 
     def __init__(self):
         """"""
-        # self.__key = "El veloz murciélago hindú comía feliz cardillo y kiwi cuando la cigüeña tocaba el saxofón detrás del palenque de paja"
-        self.__key = "Hola mundo"  # sj rtsj iduft jit - la amo
-        self.__key_length = len(self.__key)
+        self.key = "Hola mundo"  # sj rtsj iduft jit - la amo
+        self.key_length = len(self.key)
 
     def __del__(self):
         """"""
         pass
 
-    def validate_text(self, text):
-        """Validate character by character that the text can be the key (self.__key)
-
-            :param text: String of the same size that key where to compare characters
-            :return: Return False in case of failure.
-                     Return True in case of success."""
-        position = 0
-        while position < self.__key_length:
-            # Compare character by character to identify y the length of the words is the same
-            if text[position].isalpha() == self.__key[position].isalpha():
-                position += 1
-            else:  # If one character is different, the text is discarted as a possible key
-                return False
-
-        return True
-
-    def look_for_key(self, msg=""):
-        """Loof for a specific string that is equivalent to the key to decrypt (self.__key).
-
-            :param msg: String with the message where to look for.
-            :return: Return 'NO SE ENCONTRO SOLUCION' on failure.
-                     Return a string with the equivalent key in message"""
-        length_msg = len(msg)
-        position = 0
-        while position + self.__key_length <= length_msg:
-            key = msg[position: position + self.__key_length]  # Check strings of the same size
-            if self.validate_text(key):
-                if position + self.__key_length < length_msg:  # Can exist the next character?
-                    next_char = msg[position + self.__key_length]
-                    before_char = ""
-                    if position - 1 >= 0:  # Check if there is a before character
-                        before_char = msg[position - 1]
-                    if next_char == " " and before_char == "":
-                        # You are at the begining of the message
-                        return key
-                    elif next_char == " " and before_char == " ":
-                        # You are somewhere in the midle of message
-                        return key
-                else:  # You are at the end of the message
-                    before_char = ""
-                    if position - 1 >= 0:  # Check if there is a before character
-                        before_char = msg[position - 1]
-                    if before_char == " " or before_char == "":  # Valid message
-                        return key
-            position += 1
-
-        return "NO SE ENCONTRO SOLUCION"
-
-    def decrypt(self, msg="sj rtsj iduft jit"):  # rtsj iduft = hola mundo
-        """Method to discover real meaning of an encrypted message.
-
-            :param msg: String with the encrypted message
-            :return: Return 'NO SE ENCONTRO SOLUCION' on failure.
-                     Return string with the decrypted message on success.
+    def __same_characters(self, msg=""):
         """
-        decrypted_message = self.look_for_key(msg)
-        # Or return "NO SE ENCONTRO SOLUCIÓN"
-        return decrypted_message
+        Compare characters to identify if msg can be the key (self.key).
+        Variable 'msg' shall be of the same size of key to be compared.
+
+        :param msg: String of the same size that key where to compare characters
+        :return: Return False on failure
+                 Return None on invalid message
+                 Return True on success
+        """
+        if len(msg) == self.key_length:
+            for msg_char, key_char in zip(msg, self.key):
+                if msg_char.isalpha() != key_char.isalpha():
+                    return False
+            return True
+
+        return None
+
+    def __look_for_key(self, msg=""):
+        """
+        Loof for a specific string that is equivalent to the key (self.key).
+
+        :param msg: String with the message where to look for.
+        :return: Return None on failure.
+                 Return a string with the equivalent key in message on succes.
+        """
+        msg_length = len(msg)
+        for str_pos in range(0, msg_length):
+            max_length = str_pos + self.key_length
+            key = msg[str_pos: max_length]
+            if self.__same_characters(key):
+                # Does exist a next character?
+                next_char = msg[max_length] if max_length < msg_length else ""
+                # Does exist a before character?
+                before_char = msg[str_pos - 1] if str_pos - 1 >= 0 else ""
+                # If one or both exists, they shall be a white space ' '
+                if (next_char == "" or next_char == " ") and\
+                        (before_char == "" or before_char == " "):
+                    return key
+
+        return None
+
+    def decrypt(self, msg):
+        """
+        Method to discover the meaning of an encrypted message.
+
+        :param msg: String with the encrypted message
+        :return: Return 'NO SE ENCONTRO SOLUCION' on failure.
+                 Return string with the decrypted message on success.
+                 Return None on invalid message
+        """
+        if isinstance(msg, str):
+            decrypted_message = self.__look_for_key(msg)
+            if decrypted_message is None:
+                return "NO SE ENCONTRO SOLUCION"
+            return decrypted_message
+
+        return None
 
 
 if __name__ == "__main__":
