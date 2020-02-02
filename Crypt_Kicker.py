@@ -55,6 +55,26 @@ class CriptKicker():
 
         return None
 
+    def __match_characters(self, msg=""):
+        """
+        Compare characters from key crypted with real meaning of key (self.key) to get actual
+        value of each character in the message.
+
+        param msg_key: String with the message with you want to compare key
+
+        return: None for error, Dictionary with matches of characters found
+        """
+        if len(msg) != self.key_length:
+            print(len(msg), self.key_length)
+            return None
+        char_matches = {k: v for k, v in zip(msg, self.key)}
+        if None in char_matches:
+            char_matches.pop()
+        for k, v in char_matches.items():
+            print(k, ":", v)
+
+        return char_matches
+
     def decrypt(self, msg):
         """
         Method to discover the meaning of an encrypted message.
@@ -65,10 +85,14 @@ class CriptKicker():
                  Return None on invalid message
         """
         if isinstance(msg, str):
-            decrypted_message = self.__look_for_key(msg)
-            if decrypted_message is None:
+            msg_key = self.__look_for_key(msg)
+            if msg_key is None:
                 return "NO SE ENCONTRO SOLUCION"
-            return decrypted_message
+            # return msg_key
+            char_matches = self.__match_characters(msg_key)
+            if char_matches is None:
+                return "NO SE ENCONTRO SOLUCION"
+            return char_matches
 
         return None
 
