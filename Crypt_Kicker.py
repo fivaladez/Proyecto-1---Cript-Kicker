@@ -55,7 +55,7 @@ class CriptKicker():
 
         return None
 
-    def __match_characters(self, msg=""):
+    def __match_chars(self, msg=""):
         """
         Compare characters from key crypted with real meaning of key (self.key) to get actual
         value of each character in the message.
@@ -68,12 +68,19 @@ class CriptKicker():
             print(len(msg), self.key_length)
             return None
         char_matches = {k: v for k, v in zip(msg, self.key)}
-        if None in char_matches:
-            char_matches.pop()
-        for k, v in char_matches.items():
-            print(k, ":", v)
 
         return char_matches
+
+    def __replace_chars(self, msg, char_matches):
+        """
+
+        """
+        msg_decrypted = msg[:]
+        for key, val in char_matches.items():
+            if key in msg_decrypted:
+                msg_decrypted = msg_decrypted.replace(key, val)
+
+        return msg_decrypted
 
     def decrypt(self, msg):
         """
@@ -89,10 +96,16 @@ class CriptKicker():
             if msg_key is None:
                 return "NO SE ENCONTRO SOLUCION"
             # return msg_key
-            char_matches = self.__match_characters(msg_key)
+            char_matches = self.__match_chars(msg_key)
             if char_matches is None:
                 return "NO SE ENCONTRO SOLUCION"
-            return char_matches
+            # return char_matches
+            msg = msg.strip(msg_key)  # Eliminate key from msg
+            msg_decrypted = self.__replace_chars(msg, char_matches)
+            if msg_decrypted is None:
+                return "NO SE ENCONTRO SOLUCION"
+            msg_decrypted = msg_decrypted.strip()  # Correct double space left
+            return msg_decrypted
 
         return None
 
