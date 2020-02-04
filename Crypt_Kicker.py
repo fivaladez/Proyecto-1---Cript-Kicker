@@ -6,7 +6,7 @@ class CriptKicker():
 
     def __init__(self):
         """"""
-        self.key = "Hola mundo"  # sj rtsj iduft jit - la amo
+        self.key = "El veloz murciélago hindú comía feliz cardillo y kiwi cuando la cigüeña tocaba el saxofón detrás del palenque de paja"
         self.key_length = len(self.key)
 
     def __del__(self):
@@ -43,7 +43,7 @@ class CriptKicker():
         for str_pos in range(0, msg_length):
             max_length = str_pos + self.key_length
             key = msg[str_pos: max_length]
-            if self.__same_characters(key):
+            if len(key) == self.key_length and self.__same_characters(key):
                 # Does exist a next character?
                 next_char = msg[max_length] if max_length < msg_length else ""
                 # Does exist a before character?
@@ -55,7 +55,7 @@ class CriptKicker():
 
         return None
 
-    def __match_chars(self, msg=""):
+    def __match_characters(self, msg=""):
         """
         Compare characters from key crypted with real meaning of key (self.key) to get actual
         value of each character in the message.
@@ -65,20 +65,32 @@ class CriptKicker():
         return: None for error, Dictionary with matches of characters found
         """
         if len(msg) != self.key_length:
-            print(len(msg), self.key_length)
             return None
-        char_matches = {k: v for k, v in zip(msg, self.key)}
+        match_characters = {k: v for k, v in zip(msg, self.key)}
 
-        return char_matches
+        return match_characters
 
-    def __replace_chars(self, msg, char_matches):
+    def __replace_chars(self, msg, match_characters):
         """
+        Replace characters from message with found in dictionary(match_characters).
+        It substitute one at the time, to avoid substitute a valid character.
 
+        param msg: String with the characters to Replace
+        param match_characters: Dictionary with keys found from self.key and with its real value
+
+        return: None for error, String with the values of dictionary insted of keys
         """
+        if isinstance(match_characters, dict) is False:
+            return None
+
         msg_decrypted = msg[:]
-        for key, val in char_matches.items():
-            if key in msg_decrypted:
-                msg_decrypted = msg_decrypted.replace(key, val)
+        tem_msg = list()
+        for char in msg_decrypted:
+            if char in match_characters.keys():
+                tem_msg.append(match_characters[char])
+            else:
+                tem_msg.append(char)
+        msg_decrypted = "".join(tem_msg)
 
         return msg_decrypted
 
@@ -92,19 +104,30 @@ class CriptKicker():
                  Return None on invalid message
         """
         if isinstance(msg, str):
+            # Get piece of msg that represents the key
             msg_key = self.__look_for_key(msg)
             if msg_key is None:
-                return "NO SE ENCONTRO SOLUCION"
-            # return msg_key
-            char_matches = self.__match_chars(msg_key)
-            if char_matches is None:
-                return "NO SE ENCONTRO SOLUCION"
-            # return char_matches
-            msg = msg.strip(msg_key)  # Eliminate key from msg
-            msg_decrypted = self.__replace_chars(msg, char_matches)
+                return "NO SE ENCONTRO SOLUCION 1"
+            print("\n\t- Message key: ", msg_key, "\n")
+
+            # Get dictionary with meaning of crypted characters
+            match_characters = self.__match_characters(msg_key)
+            if match_characters is None:
+                return "NO SE ENCONTRO SOLUCION 2"
+            print("\n\t- Dictionary: {}".format(match_characters))
+            # for k, v in match_characters.items():
+            #     print("{}:{}".format(k, v))
+
+            # Prepare string for replacing and print (remove msg_key and white spaces)
+            msg = msg.replace(msg_key, "")
+            msg = msg.replace("  ", " ")
+            msg = msg.strip()
+
+            # Substitute characters in messages based on dictionary
+            msg_decrypted = self.__replace_chars(msg, match_characters)
             if msg_decrypted is None:
-                return "NO SE ENCONTRO SOLUCION"
-            msg_decrypted = msg_decrypted.strip()  # Correct double space left
+                return "NO SE ENCONTRO SOLUCION 3"
+            print("\n\t- Message decrypted: ", msg_decrypted, "\n")
             return msg_decrypted
 
         return None
@@ -112,9 +135,11 @@ class CriptKicker():
 
 if __name__ == "__main__":
     CK = CriptKicker()
-    cases = int(input("Número de casos a analizar? "))
+    cases = int(input("\n\tNúmero de casos a analizar? "))
     while cases > 0:
-        encrypted_message = input("Mensaje a desencriptar: ")
+        encrypted_message = input("\tMensaje a desencriptar: ")
+        # encrypted_message = "cx kuyxnkfu úrj hcxujxqx hxlx jc qbx qj cx pdáx qj odókjlud ju hrjócx jc yjcdü árlskacxod mkuqt sdábx újckü sxlqkccd z ikík srxuqd cx skovjex pdsxóx jc nxñdúfu qjplwn qjc hxcjuérj qj hxgx qj cdn wuojcjn sdu xrpdlküxskfu qjc jgjlskpd qj cx uxskfu sdu jc úku qj ljsrhjlxl cx hcxüx qj cdn ukedn"
         if encrypted_message != "":  # Ignore empty lines
-            print(CK.decrypt(encrypted_message))
+            # print("\nDecrypted message: {}".format(CK.decrypt(encrypted_message)))
+            CK.decrypt(encrypted_message)
             cases -= 1
