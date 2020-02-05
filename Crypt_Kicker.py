@@ -136,14 +136,13 @@ if __name__ == "__main__":
     CK = CryptKicker()
     cases = int(input())
     for n in range(cases):
-        lines, new_line, enable = list(), True, False
-        while new_line:
+        paragraph, continue_cycle, msg_saved = list(), True, False
+        while continue_cycle:
             line = input()
             if line != "":  # Ignore empty lines
-                lines.append(line)
-                enable = True
-            elif enable:
-                new_line = False
-        msg = " ".join(lines)
-        # print("=== Message: {}\n\n".format(msg))
+                paragraph.append(line)
+                msg_saved = True
+            elif msg_saved:
+                continue_cycle = False
+        msg = " ".join(paragraph)
         CK.decrypt(msg)
