@@ -1,7 +1,7 @@
 """Proyecto #01 de la materia de Algoritmos"""
 
 
-class CriptKicker():
+class CryptKicker():
     """Clase encargada de proporcionar metodos para desencriptar un codigo."""
 
     def __init__(self):
@@ -108,15 +108,13 @@ class CriptKicker():
             msg_key = self.__look_for_key(msg)
             if msg_key is None:
                 return "NO SE ENCONTRO SOLUCION 1"
-            print("\n\t- Message key: ", msg_key, "\n")
+            print("\n\t- Message key: {}\n".format(msg_key))
 
             # Get dictionary with meaning of crypted characters
             match_characters = self.__match_characters(msg_key)
             if match_characters is None:
                 return "NO SE ENCONTRO SOLUCION 2"
             print("\n\t- Dictionary: {}".format(match_characters))
-            # for k, v in match_characters.items():
-            #     print("{}:{}".format(k, v))
 
             # Prepare string for replacing and print (remove msg_key and white spaces)
             msg = msg.replace(msg_key, "")
@@ -127,14 +125,14 @@ class CriptKicker():
             msg_decrypted = self.__replace_chars(msg, match_characters)
             if msg_decrypted is None:
                 return "NO SE ENCONTRO SOLUCION 3"
-            print("\n\t- Message decrypted: ", msg_decrypted, "\n")
+            print("\n\t- Message decrypted: {}\n".format(msg_decrypted))
             return msg_decrypted
 
         return None
 
 
 if __name__ == "__main__":
-    CK = CriptKicker()
+    CK = CryptKicker()
     cases = int(input("\n\tNúmero de casos a analizar? "))
     while cases > 0:
         encrypted_message = input("\tMensaje a desencriptar: ")
