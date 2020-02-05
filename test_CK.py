@@ -1,6 +1,6 @@
 # -*- coding: 850 -*-
 import unittest
-import Crypt_Kicker as CK
+import crypt_kicker as CK
 
 
 class TestCriptKicker(unittest.TestCase):
@@ -18,11 +18,11 @@ class TestCriptKicker(unittest.TestCase):
     #     self.assertEqual(ck.decrypt("123456789123456789"), "NO SE ENCONTRO SOLUCION")
 
     def test_final(self):
-        ck = CK.CriptKicker()
+        ck = CK.CryptKicker()
         # with open("Crypted_msg_example.txt", "r") as cmf:
-        #     crypted_msg = cmf.read()
+        #     encrypted_msg = cmf.read()
         # with open("Decrypted_msg_example.txt", "r") as dmf:
         #     decrypted_msg = dmf.read()
-        crypted_msg = "cx kuyxnkfu úrj hcxujxqx hxlx jc qbx qj cx pdáx qj odókjlud ju hrjócx jc yjcdü árlskacxod mkuqt sdábx újckü sxlqkccd z ikík srxuqd cx skovjex pdsxóx jc nxñdúfu qjplwn qjc hxcjuérj qj hxgx qj cdn wuojcjn sdu xrpdlküxskfu qjc jgjlskpd qj cx uxskfu sdu jc úku qj ljsrhjlxl cx hcxüx qj cdn ukedn"
+        encrypted_msg = "cx kuyxnkfu úrj hcxujxqx hxlx jc qbx qj cx pdáx qj odókjlud ju hrjócx jc yjcdü árlskacxod mkuqt sdábx újckü sxlqkccd z ikík srxuqd cx skovjex pdsxóx jc nxñdúfu qjplwn qjc hxcjuérj qj hxgx qj cdn wuojcjn sdu xrpdlküxskfu qjc jgjlskpd qj cx uxskfu sdu jc úku qj ljsrhjlxl cx hcxüx qj cdn ukedn"
         decrypted_msg = "El veloz murciélago hindú comía feliz cardillo y kiwi cuando la cigüeña tocaba el saxofón detrás del palenque de paja"
-        self.assertEqual(ck.decrypt(crypted_msg), decrypted_msg)
+        self.assertEqual(ck.decrypt(encrypted_msg), decrypted_msg)

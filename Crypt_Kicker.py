@@ -108,13 +108,14 @@ class CryptKicker():
             msg_key = self.__look_for_key(msg)
             if msg_key is None:
                 return "NO SE ENCONTRO SOLUCION 1"
-            print("\n\t- Message key: {}\n".format(msg_key))
+            print("\n - Message key: {}".format(msg_key))
+            print(" - Message key: {}\n".format(self.key))
 
             # Get dictionary with meaning of crypted characters
             match_characters = self.__match_characters(msg_key)
             if match_characters is None:
                 return "NO SE ENCONTRO SOLUCION 2"
-            print("\n\t- Dictionary: {}".format(match_characters))
+            print("\n - Dictionary: {}".format(match_characters))
 
             # Prepare string for replacing and print (remove msg_key and white spaces)
             msg = msg.replace(msg_key, "")
@@ -125,7 +126,7 @@ class CryptKicker():
             msg_decrypted = self.__replace_chars(msg, match_characters)
             if msg_decrypted is None:
                 return "NO SE ENCONTRO SOLUCION 3"
-            print("\n\t- Message decrypted: {}\n".format(msg_decrypted))
+            print("\n - Message decrypted: {}\n\n".format(msg_decrypted))
             return msg_decrypted
 
         return None
@@ -133,11 +134,16 @@ class CryptKicker():
 
 if __name__ == "__main__":
     CK = CryptKicker()
-    cases = int(input("\n\tNúmero de casos a analizar? "))
-    while cases > 0:
-        encrypted_message = input("\tMensaje a desencriptar: ")
-        # encrypted_message = "cx kuyxnkfu úrj hcxujxqx hxlx jc qbx qj cx pdáx qj odókjlud ju hrjócx jc yjcdü árlskacxod mkuqt sdábx újckü sxlqkccd z ikík srxuqd cx skovjex pdsxóx jc nxñdúfu qjplwn qjc hxcjuérj qj hxgx qj cdn wuojcjn sdu xrpdlküxskfu qjc jgjlskpd qj cx uxskfu sdu jc úku qj ljsrhjlxl cx hcxüx qj cdn ukedn"
-        if encrypted_message != "":  # Ignore empty lines
-            # print("\nDecrypted message: {}".format(CK.decrypt(encrypted_message)))
-            CK.decrypt(encrypted_message)
-            cases -= 1
+    cases = int(input())
+    for n in range(cases):
+        lines, new_line, enable = list(), True, False
+        while new_line:
+            line = input()
+            if line != "":  # Ignore empty lines
+                lines.append(line)
+                enable = True
+            elif enable:
+                new_line = False
+        msg = " ".join(lines)
+        # print("=== Message: {}\n\n".format(msg))
+        CK.decrypt(msg)
