@@ -43,7 +43,7 @@ class CryptKicker():
         for str_pos in range(0, msg_length):
             max_length = str_pos + self.key_length
             key = msg[str_pos: max_length]
-            if len(key) == self.key_length and self.__same_characters(key):
+            if self.__same_characters(key):
                 # Does exist a next character?
                 next_char = msg[max_length] if max_length < msg_length else ""
                 # Does exist a before character?
@@ -103,33 +103,33 @@ class CryptKicker():
                  Return string with the decrypted message on success.
                  Return None on invalid message
         """
-        if isinstance(msg, str):
-            # Get piece of msg that represents the key
-            msg_key = self.__look_for_key(msg)
-            if msg_key is None:
-                return "NO SE ENCONTRO SOLUCION 1"
-            print("\n - Message key: {}".format(msg_key))
-            print(" - Message key: {}\n".format(self.key))
+        if isinstance(msg, str) is False:
+            return None
 
-            # Get dictionary with meaning of crypted characters
-            match_characters = self.__match_characters(msg_key)
-            if match_characters is None:
-                return "NO SE ENCONTRO SOLUCION 2"
-            print("\n - Dictionary: {}".format(match_characters))
+        # Get piece of msg that represents the key
+        msg_key = self.__look_for_key(msg)
+        if msg_key is None:
+            return "NO SE ENCONTRO SOLUCION"
+        print("\n - Message key: {}".format(msg_key))
+        print(" - Message key: {}\n".format(self.key))
 
-            # Prepare string for replacing and print (remove msg_key and white spaces)
-            msg = msg.replace(msg_key, "")
-            msg = msg.replace("  ", " ")
-            msg = msg.strip()
+        # Get dictionary with meaning of crypted characters
+        match_characters = self.__match_characters(msg_key)
+        if match_characters is None:
+            return "NO SE ENCONTRO SOLUCION"
+        print("\n - Dictionary: {}".format(match_characters))
 
-            # Substitute characters in messages based on dictionary
-            msg_decrypted = self.__replace_chars(msg, match_characters)
-            if msg_decrypted is None:
-                return "NO SE ENCONTRO SOLUCION 3"
-            print("\n - Message decrypted: {}\n\n".format(msg_decrypted))
-            return msg_decrypted
+        # Remove msg_key and white spaces
+        msg = msg.replace(msg_key, "")
+        msg = msg.replace("  ", " ")
+        msg = msg.strip()
 
-        return None
+        # Substitute characters in messages based on dictionary
+        msg_decrypted = self.__replace_chars(msg, match_characters)
+        if msg_decrypted is None:
+            return "NO SE ENCONTRO SOLUCION"
+        print("\n - Message decrypted: {}\n\n".format(msg_decrypted))
+        return msg_decrypted
 
 
 if __name__ == "__main__":
